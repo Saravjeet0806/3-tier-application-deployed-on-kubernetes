@@ -3,34 +3,34 @@ const mysql = require("mysql2");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 const db = mysql.createConnection({
     host: "db",
     user: "root",
-    password: "password",
-    database: "testdb"
+    password: "rootpassword",
+    database: "userdb"
 });
 
 db.connect(err => {
-    if (err) console.error("Database connection error:", err);
-    else console.log("Connected to MySQL");
+    if (err) throw err;
+    console.log("Connected to MySQL database!");
 });
 
-app.post("/api/data", (req, res) => {
-    const { name } = req.body;
-    db.query("INSERT INTO users (name) VALUES (?)", [name], (err) => {
-        if (err) res.status(500).send(err);
-        else res.send("Data inserted");
+app.post("/users", (req, res) => {
+    const { name, email } = req.body;
+    db.query("INSERT INTO users (name, email) VALUES (?, ?)", [name, email], (err) => {
+        if (err) return res.status(500).send(err);
+        res.send({ message: "User added" });
     });
 });
 
-app.get("/api/data", (req, res) => {
+app.get("/users", (req, res) => {
     db.query("SELECT * FROM users", (err, results) => {
-        if (err) res.status(500).send(err);
-        else res.json(results);
+        if (err) return res.status(500).send(err);
+        res.json(results);
     });
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(3000, () => console.log("Server running on port 3000"));

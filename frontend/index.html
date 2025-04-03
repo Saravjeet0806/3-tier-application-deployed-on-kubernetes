@@ -3,33 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple 3-Tier App</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Three-Tier App</title>
 </head>
 <body>
-    <h2>Simple 3-Tier App</h2>
-    <input type="text" id="name" placeholder="Enter your name">
-    <button onclick="submitData()">Submit</button>
-    <ul id="dataList"></ul>
+    <h2>User Registration</h2>
+    <form id="userForm">
+        <input type="text" id="name" placeholder="Enter Name" required>
+        <input type="email" id="email" placeholder="Enter Email" required>
+        <button type="submit">Register</button>
+    </form>
+    
+    <h2>Registered Users</h2>
+    <ul id="userList"></ul>
 
-    <script>
-        async function submitData() {
-            const name = document.getElementById("name").value;
-            await fetch("http://localhost:5000/api/data", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name })
-            });
-            loadData();
-        }
-
-        async function loadData() {
-            const res = await fetch("http://localhost:5000/api/data");
-            const data = await res.json();
-            document.getElementById("dataList").innerHTML = data.map(item => `<li>${item.name}</li>`).join("");
-        }
-
-        loadData();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
